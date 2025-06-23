@@ -1,0 +1,7 @@
+ipykernel
+openai==1.14.0
+jupyterlab
+python-dotenv
+yfinance
+pandas
+matplotlib
