@@ -52,7 +52,9 @@ _ = load_dotenv(find_dotenv())
 
 
 def print_messages_generated():
-    # Print the current messages after processing the response
+    """
+    Function to append a message to the response model.
+    """
     for responses_message in output_compute_messages:
         print("\nResponse Process Data : ")
         print(f"message_id: {responses_message.id}")
@@ -62,7 +64,10 @@ def print_messages_generated():
         print(f"message: {responses_message.message}")
 
 
-# Logic for get message from console input user. This response need add in output_compute_messages if the response ia is success
+# Logic for get message from console input user.
+# This response need add in output_compute_messages with status in progress
+# and complete if the response ia is success or imcomplete in case failed.
+#  No caso de sucesso ou falha é necessario encontrar a ultima mensagem do usuario e alterar para o status correto
 messages_from_user = [{"role": "user",
                         "content": "Write a one-sentence bedtime story about a unicorn."}]
 
