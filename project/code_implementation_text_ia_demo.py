@@ -8,8 +8,10 @@ from openai import OpenAI
 from openai.types.responses import ResponseOutputMessage
 from openai.types.responses import Response
 
-# Class encapsulate response output message
 class CustomResponseOutputMessage(ResponseOutputMessage):
+    """
+    Class encapsulate response output message.
+    """
     created_at: str
     message: str
 
@@ -67,7 +69,8 @@ def print_messages_generated():
 # Logic for get message from console input user.
 # This response need add in output_compute_messages with status in progress
 # and complete if the response ia is success or imcomplete in case failed.
-#  No caso de sucesso ou falha é necessario encontrar a ultima mensagem do usuario e alterar para o status correto
+# No caso de sucesso ou falha é necessario
+# encontrar a ultima mensagem do usuario e alterar para o status correto
 messages_from_user = [{"role": "user",
                         "content": "Write a one-sentence bedtime story about a unicorn."}]
 
