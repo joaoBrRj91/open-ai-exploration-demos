@@ -18,17 +18,24 @@ class CustomResponseOutputMessage(ResponseOutputMessage):
 
 output_compute_messages: List[CustomResponseOutputMessage] = []
 
-def model_api_response_call(messages_input:list) -> Response:
+def model_api_response_call(messages_input:list, stream_response:bool = False) -> Response:
     """
-    Function to call the OpenAI API and get a response.
+    Function to call the OpenAI API.
     """
     client = OpenAI()
-    return client.responses.create(
+    response = client.responses.create(
         model=os.getenv("MODEL"),
         temperature=float(os.getenv("TEMPERATURE")),
         max_output_tokens=int(os.getenv("MAX_TOKENS")),
-        input=messages_input
+        input=messages_input,
+        stream=stream_response
     )
+
+    if stream_response is True:
+        for stream_event in response:
+            print(stream_event, end='')
+
+    return response
 
 def response_model_output_generated(response_model:Response) -> CustomResponseOutputMessage:
     """
