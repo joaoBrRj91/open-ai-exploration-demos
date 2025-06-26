@@ -37,23 +37,33 @@ def model_api_response_call(messages_input:list, stream_response:bool = False) -
 
     return response
 
-def response_model_output_generated(response_model:Response) -> CustomResponseOutputMessage:
+
+def create_custom_output_response(id_:str,
+                                created_at:str,
+                                role:str,
+                                status:str,
+                                message:str) -> CustomResponseOutputMessage:
     """
-    Function to convert the response output to a ResponseOutputMessage.
+    Function to create the response output
     """
     return CustomResponseOutputMessage(
-        id=response_model.id,
-        created_at=response_model.created_at,
-        role=response_model.output[0].role,
-        status=response_model.output[0].status,
-        message=response_model.output_text
+        id=id_,
+        created_at=created_at,
+        role=role,
+        status=status,
+        message=message
     )
 
-def response_model_append_message(response_model:Response, chat_from_user:List[dict[str, str]]):
+def append_response_model_message(response_model:Response):
     """
     Function to append a message to the response model.
     """
-    output_compute_messages.append(response_model_output_generated(response_model))
+    data = response_model.model_dump()
+    id_, created_at, output = (data['id'], data['created_at'], data['output'])
+
+    output_compute_messages.append(
+        create_custom_output_response(id_,created_at,output[0].role,
+                                       output[0].status, output[0].output_text))
 
 
 # Load envirement variables from .env
@@ -83,6 +93,6 @@ messages_from_user = [{"role": "user",
 
 message_response_from_ia = model_api_response_call(messages_from_user)
 
-response_model_append_message(message_response_from_ia, messages_from_user)
+append_response_model_message(message_response_from_ia)
 
 print_messages_generated()
