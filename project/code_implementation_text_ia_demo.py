@@ -61,11 +61,6 @@ def append_response_model_message(response_model:Response):
         create_custom_output_response(id_,created_at,output[0].role,
                                        output[0].status, output[0].output_text))
 
-
-# Load envirement variables from .env
-_ = load_dotenv(find_dotenv())
-
-
 def print_messages_generated():
     """
     Function to append a message to the response model.
@@ -78,6 +73,9 @@ def print_messages_generated():
         print(f"status: {responses_message.status}")
         print(f"message: {responses_message.message}")
 
+
+# Load envirement variables from .env
+_ = load_dotenv(find_dotenv())
 
 #TODO - Improviment code
 # Logic for get message from console input user.
@@ -97,11 +95,13 @@ message_response_from_ia = model_api_response_call(messages_from_user,isStreamPr
 if isStreamProcessing:
    #TODO : In final version is not iteration here but call
    # a method called processed stream message
-   # And in the final loop event is add a new object inCustomResponseOutputMessage
+   # And in the final loop event is add a new object inCustomResponseOutputMessage 
+   # and added in output_compute_messages
     for stream_event in message_response_from_ia:
         print(stream_event, end='')
 
 else:
     append_response_model_message(message_response_from_ia)
 
-    print_messages_generated()
+
+print_messages_generated()
