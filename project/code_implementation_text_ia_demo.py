@@ -31,10 +31,6 @@ def model_api_response_call(messages_input:list, stream_response:bool = False) -
         stream=stream_response
     )
 
-    if stream_response is True:
-        for stream_event in response:
-            print(stream_event, end='')
-
     return response
 
 
@@ -83,16 +79,29 @@ def print_messages_generated():
         print(f"message: {responses_message.message}")
 
 
+#TODO - Improviment code
 # Logic for get message from console input user.
 # This response need add in output_compute_messages with status in progress
 # and complete if the response ia is success or imcomplete in case failed.
-# No caso de sucesso ou falha é necessario
-# encontrar a ultima mensagem do usuario e alterar para o status correto
+# In case sucess or failed
+# Find last message of user and change status for correcty
+# Choice from user if is stream data or not
 messages_from_user = [{"role": "user",
                         "content": "Write a one-sentence bedtime story about a unicorn."}]
 
-message_response_from_ia = model_api_response_call(messages_from_user)
+#From User
+isStreamProcessing = False
 
-append_response_model_message(message_response_from_ia)
+message_response_from_ia = model_api_response_call(messages_from_user,isStreamProcessing)
 
-print_messages_generated()
+if isStreamProcessing:
+   #TODO : In final version is not iteration here but call
+   # a method called processed stream message
+   # And in the final loop event is add a new object inCustomResponseOutputMessage
+    for stream_event in message_response_from_ia:
+        print(stream_event, end='')
+
+else:
+    append_response_model_message(message_response_from_ia)
+
+    print_messages_generated()
