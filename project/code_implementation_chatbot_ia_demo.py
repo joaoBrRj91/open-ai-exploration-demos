@@ -12,12 +12,19 @@ _ = load_dotenv(find_dotenv())
 mensages = [{}]
 USER_ROLE = 'User'
 ASSISTANCE_ROLE = 'Assistance'
+NEW_LINE_OUTPUT = '\n'
 
 def update_chat_messages(message:str, role:str):
     """
     Function to append message.
     """
-    print(f'{role}: {message}',end='')
+    interactive_output_text: str
+    if role == USER_ROLE:
+        interactive_output_text = f'Question User - {message}'
+    else:
+        interactive_output_text = f'Answer Bot - {message}'
+
+    print(interactive_output_text, NEW_LINE_OUTPUT)
     mensages.append({'role': role, 'content': message})
 
 
@@ -50,13 +57,12 @@ def initialize_chat_with_model():
     """
     Function initialize chat.
     """
-    print('Welcome - This chatbot is a demo for interaction with IA. Enjoy 😁')
+    print('Welcome - This chatbot is a demo for interaction with IA. Enjoy 😁', NEW_LINE_OUTPUT)
     user_name = input('What`s your name ? : ')
-    print(f'{user_name} start your conversation with bot.')
+    print(f'{user_name} start your conversation with bot.', NEW_LINE_OUTPUT)
     while True:
-        message = input(f'User({user_name}): ')
+        message = input(f'({user_name}) - Enter your question to bot: ')
         update_chat_messages(message,USER_ROLE)
-        break
 
 
 if __name__ == '__main__':
