@@ -9,9 +9,10 @@ from openai.types.responses import Response
 # Load envirement variables from .env
 _ = load_dotenv(find_dotenv())
 
-mensages = [{}]
+mensages = []
 USER_ROLE = 'User'
 ASSISTANCE_ROLE = 'Assistance'
+EXIT_INTERACTION = 'exit'
 NEW_LINE_OUTPUT = '\n'
 
 def update_chat_messages(message:str, role:str):
@@ -25,7 +26,7 @@ def update_chat_messages(message:str, role:str):
         interactive_output_text = f'Answer Bot - {message}'
 
     print(interactive_output_text, NEW_LINE_OUTPUT)
-    mensages.append({'role': role, 'content': message})
+    mensages.append(interactive_output_text)
 
 
 def generate_model_api_response(messages_input:list[dict],
@@ -53,16 +54,27 @@ def process_stream_response(stream_response:Response):
         print(stream_event, end='')
 
 
+def display_interaction_messages():
+    """
+    Function to display interaction messages
+    """
+    for message_interaction in mensages:
+        print(message_interaction)
+
 def initialize_chat_with_model():
     """
     Function initialize chat.
     """
     print('Welcome - This chatbot is a demo for interaction with IA. Enjoy 😁', NEW_LINE_OUTPUT)
     user_name = input('What`s your name ? : ')
-    print(f'{user_name} start your conversation with bot.', NEW_LINE_OUTPUT)
+    print(f'{user_name} start your conversation with bot (Enter "exit" finish and display interactions).', NEW_LINE_OUTPUT)
     while True:
         message = input(f'({user_name}) - Enter your question to bot: ')
-        update_chat_messages(message,USER_ROLE)
+        if message != EXIT_INTERACTION:
+            update_chat_messages(message,USER_ROLE)
+        else:
+            display_interaction_messages()
+            break
 
 
 if __name__ == '__main__':
