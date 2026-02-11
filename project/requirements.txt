@@ -1,5 +1,5 @@
 ipykernel
-openai==1.14.0
+openai>=2.0.0
 jupyterlab
 python-dotenv
 yfinance
