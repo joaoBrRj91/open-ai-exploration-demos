@@ -82,7 +82,7 @@ _ = load_dotenv(find_dotenv())
 # This response need add in output_compute_messages with status in progress
 # and complete if the response ia is success or imcomplete in case failed.
 # In case sucess or failed
-# Find last message of user and change status for correcty
+# Find last message of user and change status for correcty (find with id message)
 # Choice from user if is stream data or not
 messages_from_user = [{"role": "user",
                         "content": "Write a one-sentence bedtime story about a unicorn."}]
