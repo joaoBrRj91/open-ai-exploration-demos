@@ -21,7 +21,7 @@ def initialize_chat_with_model():
         message = input(f'({user_name}) - Enter your question to bot: ')
         if message != manager.EXIT_INTERACTION:
             manager.update_chat_messages(message, manager.USER_ROLE)
-            manager.process_stream_response(manager.generate_model_api_response())
+            manager.generate_model_api_response()
         else:
             manager.display_interaction_messages()
             manager.clear_chat_messages()

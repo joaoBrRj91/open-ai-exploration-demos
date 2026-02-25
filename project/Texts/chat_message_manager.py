@@ -39,29 +39,33 @@ class ChatMessageManager:
 
         self.messages.append({'role': role, 'content': interactive_output_text})
 
+    def process_stream_response(self, stream_manager) -> str:
+            """Process a streaming response, print deltas and append final text to history."""
+            print(self.NEW_LINE_OUTPUT)
+            response_text = ''
+            with stream_manager as stream:
+                for event in stream:
+                    if event.type == self.EVENT_STREAM_RESPONSE_CHUNK:
+                        print(event.delta, end='')
+                        response_text += event.delta
+                    elif event.type == self.EVENT_STREAM_RESPONSE_COMPLETED:
+                        print(self.NEW_LINE_OUTPUT)
+                        break
+
+            self.update_chat_messages(response_text, self.ASSISTANCE_ROLE)
+            return response_text
+
+
     def generate_model_api_response(self):
         """Returns the streaming response manager from the Responses API."""
-        return self.client.responses.stream(
+        response_stream = self.client.responses.stream(
             model=self.model,
             max_output_tokens=self.max_output_tokens,
             input=self.messages,
         )
 
-    def process_stream_response(self, stream_manager) -> str:
-        """Process a streaming response, print deltas and append final text to history."""
-        print(self.NEW_LINE_OUTPUT)
-        response_text = ''
-        with stream_manager as stream:
-            for event in stream:
-                if event.type == self.EVENT_STREAM_RESPONSE_CHUNK:
-                    print(event.delta, end='')
-                    response_text += event.delta
-                elif event.type == self.EVENT_STREAM_RESPONSE_COMPLETED:
-                    print(self.NEW_LINE_OUTPUT)
-                    break
-
-        self.update_chat_messages(response_text, self.ASSISTANCE_ROLE)
-        return response_text
+        self.process_stream_response(response_stream)
+        
 
     def display_interaction_messages(self) -> None:
         """Print stored conversation history."""
